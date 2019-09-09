@@ -1,6 +1,6 @@
 //
-//modified by:
-//date:
+//modified by: Oscar Rodriguez
+//date: 9/9/119
 //
 //3350 Spring 2019 Lab-1
 //This program demonstrates the use of OpenGL and XWindows
@@ -29,8 +29,9 @@
 //   .collision detection
 //   .more objects
 //
-#include <iostream>
+
 using namespace std;
+#include <iostream>
 #include <stdio.h>
 #include <cstdlib>
 #include <ctime>
@@ -39,8 +40,9 @@ using namespace std;
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <GL/glx.h>
+#include "fonts.h"
 
-const int MAX_PARTICLES = 10;
+const int MAX_PARTICLES = 100;
 const float GRAVITY     = 0.1;
 
 //some structures
@@ -259,8 +261,7 @@ void check_mouse(XEvent *e)
 			savex = e->xbutton.x;
 			savey = e->xbutton.y;
 			//Code placed here will execute whenever the mouse moves.
-
-
+			
 		}
 	}
 }
@@ -317,6 +318,7 @@ void movement()
 
 void render()
 {
+	Rect r;
 	glClear(GL_COLOR_BUFFER_BIT);
 	//Draw shapes...
 	//draw the box
@@ -354,6 +356,13 @@ void render()
 	}
 	//
 	//Draw your 2D text here
+	glClear(GL_COLOR_BUFFER_BIT);
+	r.bot = gl.yres - 20;
+	r.left = 10;
+	r.center = 0;
+	ggprint8b(&r, 16, 0x00ff0000, "3350 - Waterfall Model");
+	ggprint8b(&r, 16, 0x00ffff00, "n Particles: %i", g.particle);
+	ggprint8b(&r, 16, 0x00ffff00, "n TEMP TEXT: %i");
 
 
 
