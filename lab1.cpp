@@ -1,8 +1,9 @@
 //
 //modified by: Oscar Rodriguez
-//date: 9/9/119
+//date: Fall 2019
 //
-//3350 Spring 2019 Lab-1
+//
+//3350 Lab-1
 //This program demonstrates the use of OpenGL and XWindows
 //
 //Assignment is to modify this program.
@@ -29,8 +30,6 @@
 //   .collision detection
 //   .more objects
 //
-
-using namespace std;
 #include <iostream>
 #include <stdio.h>
 #include <cstdlib>
@@ -42,27 +41,32 @@ using namespace std;
 #include <GL/glx.h>
 #include "fonts.h"
 
-const int MAX_PARTICLES = 100;
-const float GRAVITY     = 0.1;
+using namespace std;
+
+const int MAX_PARTICLES = 1000;
+const float GRAVITY     = 0.35;
 
 //some structures
 
-struct Vec {
+struct Vec
+{
 	float x, y, z;
 };
 
-struct Shape {
-	float width, height;
+struct Shape
+{	float width, height;
 	float radius;
 	Vec center;
 };
 
-struct Particle {
+struct Particle
+{
 	Shape s;
 	Vec velocity;
 };
 
-class Global {
+class Global
+{
 public:
 	int xres, yres;
 	Shape box;
@@ -71,7 +75,8 @@ public:
 	Global();
 } g;
 
-class X11_wrapper {
+class X11_wrapper
+{
 private:
 	Display *dpy;
 	Window win;
@@ -222,8 +227,8 @@ void makeParticle(int x, int y)
 	Particle *p = &g.particle[g.n];
 	p->s.center.x = x;
 	p->s.center.y = y;
-	p->velocity.y = ((double)rand() / (double)RAND_MAX) -0.5;
-	p->velocity.x = ((double)rand() / (double)RAND_MAX) -0.5 + 0.2;
+	p->velocity.y = ((double)rand() / (double)RAND_MAX) -0.8;
+	p->velocity.x = ((double)rand() / (double)RAND_MAX) -0.5 + 0.20;
 	++g.n;
 }
 
@@ -261,7 +266,20 @@ void check_mouse(XEvent *e)
 			savex = e->xbutton.x;
 			savey = e->xbutton.y;
 			//Code placed here will execute whenever the mouse moves.
-			
+			int y = g.yres - e->xbutton.y;
+            makeParticle(e->xbutton.x, y);
+            makeParticle(e->xbutton.x, y);
+            makeParticle(e->xbutton.x, y);
+            makeParticle(e->xbutton.x, y);
+            makeParticle(e->xbutton.x, y);
+            makeParticle(e->xbutton.x, y);
+            makeParticle(e->xbutton.x, y);
+            makeParticle(e->xbutton.x, y);
+            makeParticle(e->xbutton.x, y);
+            makeParticle(e->xbutton.x, y);
+                                    
+
+
 		}
 	}
 }
@@ -304,10 +322,16 @@ void movement()
 	Shape *s =&g.box;
 	if (p->s.center.y < s->center.y + s->height &&
 		p->s.center.x > s->center.x - s->width &&
-		p->s.center.x < s->center.x + s->width){
-		p->velocity.y = - (p->velocity.y * 0.8);
+		p->s.center.x < s->center.x + s->width) {
+		p->velocity.y = - (p->velocity.y * 0.75);
 	}
-	//check for off-screen
+    if (p->s.center.y < s->center.y - s->height &&
+        p->s.center.x > s->center.x - s->width &&
+        p->s.center.x < s->center.x + s->width) {
+        p->velocity.y = -5;
+        p->velocity.x = 1;
+    }
+    //check for off-screen
 	if (p->s.center.y < 0.0) {
 		cout << "off screen" << endl;
 		g.particle[i] = g.particle[g.n-1];
@@ -319,6 +343,9 @@ void movement()
 void render()
 {
 	Rect r;
+	r.bot = g.yres - 100;
+	r.left = 100;
+	r.center = 10;
 	glClear(GL_COLOR_BUFFER_BIT);
 	//Draw shapes...
 	//draw the box
@@ -356,21 +383,9 @@ void render()
 	}
 	//
 	//Draw your 2D text here
-	glClear(GL_COLOR_BUFFER_BIT);
-	r.bot = gl.yres - 20;
-	r.left = 10;
-	r.center = 0;
-	ggprint8b(&r, 16, 0x00ff0000, "3350 - Waterfall Model");
-	ggprint8b(&r, 16, 0x00ffff00, "n Particles: %i", g.particle);
-	ggprint8b(&r, 16, 0x00ffff00, "n TEMP TEXT: %i");
-
-
-
-
-
-
-
-
+	ggprint8b(&r, 16, 0x00ff0000, "3350 - Waterfall");
+	ggprint8b(&r, 16, 0x00ffff00, "yay");
+	ggprint8b(&r, 16, 0x00ffff00, "does it works??");
 
 }
 
